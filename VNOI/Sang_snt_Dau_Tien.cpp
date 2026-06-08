@@ -4,7 +4,6 @@ using namespace std;
 const int MAXN = 1000005;
 int spf[MAXN];
 
-// Tiền xử lý Sàng SPF
 void sieve()
 {
     for (int i = 2; i < MAXN; i++)
@@ -29,7 +28,7 @@ void solve()
     vector<int> a(n - 1);
     vector<int> primes;
     vector<int> composites;
-    vector<int> orig_p; // Lưu số lượng số nguyên tố đứng trước từng hợp số
+    vector<int> orig_p;
 
     int p_count = 0;
     for (int i = 0; i < n - 1; i++)
@@ -47,7 +46,6 @@ void solve()
         }
     }
 
-    // Đánh dấu vị trí (1-based) của các số nguyên tố trong dãy P
     vector<int> pos_in_P(n + 1, 0);
     for (int i = 0; i < (int)primes.size(); i++)
     {
@@ -55,14 +53,13 @@ void solve()
     }
 
     long long total_swaps = 0;
-    int max_R = 0; // Đóng vai trò là R_{i-1}
+    int max_R = 0;
 
     for (int i = 0; i < (int)composites.size(); i++)
     {
         int C = composites[i];
-        int earliest_p_idx = 1e9; // Tìm req_p[i]
+        int earliest_p_idx = 1e9;
 
-        // Phân tích ra thừa số nguyên tố bằng SPF
         int temp = C;
         while (temp > 1)
         {
@@ -72,10 +69,8 @@ void solve()
                 temp /= p;
         }
 
-        // Áp dụng công thức: R_i = max(R_{i-1}, req_p[i])
         max_R = max(max_R, earliest_p_idx);
 
-        // Cộng dồn số bước nhảy
         if (max_R > orig_p[i])
         {
             total_swaps += (max_R - orig_p[i]);
@@ -87,11 +82,11 @@ void solve()
 
 int main()
 {
-    // Tối ưu I/O siêu tốc
+
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    sieve(); // Gọi sàng 1 lần duy nhất
+    sieve();
 
     int t;
     if (cin >> t)
