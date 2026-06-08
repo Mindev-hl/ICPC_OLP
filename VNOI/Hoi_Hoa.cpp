@@ -1,16 +1,12 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-// Cấu trúc lưu trữ thao tác vẽ
 struct Operation
 {
-    int type;  // 0: Hàng, 1: Cột
-    int index; // Vị trí (1-based)
-    int color; // Màu
+    int type;
+    int index;
+    int color;
 };
 
 void solve()
@@ -22,7 +18,6 @@ void solve()
     vector<vector<int>> r_colors(n);
     vector<vector<int>> c_colors(m);
 
-    // Nhập dữ liệu và gom nhóm màu sắc
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
@@ -40,7 +35,6 @@ void solve()
     vector<vector<int>> row_cnt(n), col_cnt(m);
     vector<bool> row_peeled(n, false), col_peeled(m, false);
 
-    // Tiền xử lý hàng: Nén mảng màu và chuẩn bị mảng đếm tần suất
     for (int i = 0; i < n; i++)
     {
         sort(r_colors[i].begin(), r_colors[i].end());
@@ -49,7 +43,6 @@ void solve()
         row_cnt[i].assign(r_colors[i].size(), 0);
     }
 
-    // Tiền xử lý cột
     for (int j = 0; j < m; j++)
     {
         sort(c_colors[j].begin(), c_colors[j].end());
@@ -58,7 +51,6 @@ void solve()
         col_cnt[j].assign(c_colors[j].size(), 0);
     }
 
-    // Đếm tần suất xuất hiện ban đầu
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
@@ -76,7 +68,6 @@ void solve()
 
     queue<pair<int, int>> q; // {loại, vị trí}
 
-    // Đẩy các nét vẽ cuối cùng vào hàng đợi
     for (int i = 0; i < n; i++)
     {
         if (row_distinct[i] == 1)
@@ -90,7 +81,6 @@ void solve()
 
     vector<Operation> ans;
 
-    // Thuật toán BFS Tẩy màu ngược chiều
     while (!q.empty())
     {
         auto [type, idx] = q.front();
@@ -115,7 +105,7 @@ void solve()
             if (C != -1)
             {
                 ans.push_back({0, idx + 1, C});
-                // Tẩy màu và cập nhật cho các cột tương ứng
+
                 for (int j = 0; j < m; j++)
                 {
                     if (a[idx][j] != 0)
@@ -138,7 +128,7 @@ void solve()
             }
         }
         else
-        { // Xử lý Cột
+        {
             if (col_peeled[idx] || col_distinct[idx] != 1)
                 continue;
             col_peeled[idx] = true;
@@ -156,7 +146,7 @@ void solve()
             if (C != -1)
             {
                 ans.push_back({1, idx + 1, C});
-                // Tẩy màu và cập nhật cho các hàng tương ứng
+
                 for (int i = 0; i < n; i++)
                 {
                     if (a[i][idx] != 0)
@@ -180,7 +170,6 @@ void solve()
         }
     }
 
-    // Kiểm tra tính hợp lệ
     bool possible = true;
     for (int i = 0; i < n; i++)
     {
@@ -196,7 +185,6 @@ void solve()
             break;
     }
 
-    // In kết quả
     if (!possible)
     {
         cout << "NO\n";
@@ -214,7 +202,6 @@ void solve()
 
 int main()
 {
-    // Tối ưu hóa I/O để chống TLE
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
