@@ -12,16 +12,14 @@ void solve()
         cin >> a[i];
     }
 
-    // M[i] lưu giá trị nhỏ nhất của các cột từ i+1 đến n
     vector<ll> M(n + 1, 0);
-    ll current_min = 2e18; // Khởi tạo vô cực
+    ll current_min = 2e18;
     for (int i = n; i >= 1; i--)
     {
         M[i] = current_min;
         current_min = min(current_min, a[i]);
     }
 
-    // Tính tổng số khối di chuyển ban đầu
     ll S = 0;
     for (int i = 1; i <= n; i++)
     {
@@ -31,19 +29,17 @@ void solve()
         }
     }
 
-    // Dùng Monotonic Stack tìm q[i]: vị trí gần nhất bên trái có a[q[i]] < a[i]
     vector<int> q(n + 1, 0);
     stack<int> st;
     for (int i = 1; i <= n; i++)
     {
-        // Loại bỏ các cột cao hơn hoặc bằng ra khỏi stack
         while (!st.empty() && a[st.top()] >= a[i])
         {
             st.pop();
         }
         if (st.empty())
         {
-            q[i] = 0; // Không có cột nào nhỏ hơn ở bên trái
+            q[i] = 0;
         }
         else
         {
@@ -52,12 +48,11 @@ void solve()
         st.push(i);
     }
 
-    // Tìm lợi nhuận lớn nhất khi xóa 1 khối
     ll max_profit = -1;
     for (int i = 1; i <= n; i++)
     {
         if (a[i] > 0)
-        { // Chỉ xóa được nếu cột đó có ít nhất 1 khối
+        {
             if (a[i] <= M[i])
             {
                 ll profit = i - q[i] - 1;
@@ -70,21 +65,19 @@ void solve()
         }
     }
 
-    // In ra kết quả
     cout << S + max_profit << "\n";
 }
 
 int main()
 {
-    // Tối ưu I/O cho C++
+
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
     int t = 1;
-    cin >> t; // Đọc số lượng test case nếu có
+    cin >> t;
     while (t--)
     {
         solve();
     }
-    return 0;
 }
